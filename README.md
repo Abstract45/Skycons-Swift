@@ -8,14 +8,19 @@ This is a one day transfer from zachwaugh's Objective C code to Swift, so it is 
 
 Create a `SKYIconView`, with a frame in mind. Set the type of weather and color, then use as you would use a UIView. It will be animated by default and the animation can be turned off by setting the new that you have created to pause 
 
-``let iconView = SKYIconView(frame: frame)
+```Swift
+let iconView = SKYIconView(frame: frame)
 iconView.setType = .ClearDay
 iconView.setColor = UIColor.cyanColor()
 self.view.addSubview(iconView)
 iconView.pause To pause the animation when needed
-``
+```
 
 ## Gif
+
+<p align="center">
+  <img src="https://github.com/miwand/Skycons-Swift/blob/master/skycons-Gif.gif" alt="Skycons"/>
+</p>
 
 
 ## License
