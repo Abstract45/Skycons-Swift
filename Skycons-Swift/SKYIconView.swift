@@ -320,7 +320,7 @@ class SKYIconView: UIView {
         setUpStroke(ctx, lineCapType: .Round, joinCapType: .Round, lineWidth: s, color: color, fillColor: nil)
         CGContextBeginPath(ctx)
         CGContextAddArc(ctx, newcx, cy, a, p + CGFloat(TWO_PI/8), p + CGFloat(TWO_PI * 7/8), 0)
-        CGContextAddArc(ctx, cx + cos(p) * a * CGFloat(TWO_OVER_SQRT_2), cy + sin(p) * a * CGFloat(TWO_OVER_SQRT_2), a, p + CGFloat(TWO_PI) * 5 / 8, p + CGFloat(TWO_PI) * 3 / 8, 1)
+        CGContextAddArc(ctx, newcx + cos(p) * a * CGFloat(TWO_OVER_SQRT_2), cy + sin(p) * a * CGFloat(TWO_OVER_SQRT_2), a, p + CGFloat(TWO_PI) * 5 / 8, p + CGFloat(TWO_PI) * 3 / 8, 1)
         CGContextClosePath(ctx)
         CGContextStrokePath(ctx)
     }
