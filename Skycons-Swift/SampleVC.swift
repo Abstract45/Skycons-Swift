@@ -20,22 +20,22 @@ class SampleVC: UIViewController {
         
         let weatherTypes: [Skycons] =
             [
-                .ClearDay,
-                .ClearNight,
-                .Cloudy,
-                .Fog,
-                .PartlyCloudyDay,
-                .PartlyCloudyNight,
-                .Rain,
-                .Sleet,
-                .Snow,
-                .Wind
+                .clearDay,
+                .clearNight,
+                .cloudy,
+                .fog,
+                .partlyCloudyDay,
+                .partlyCloudyNight,
+                .rain,
+                .sleet,
+                .snow,
+                .wind
         ]
         
         for i in weatherTypes {
             let iconView = SKYIconView(frame: CGRect(x: xPadding, y: yPadding, width: 128, height: 128))
             
-            if yPadding >= UIScreen.mainScreen().bounds.height - 200 {
+            if yPadding >= UIScreen.main.bounds.height - 200 {
                 xPadding += 150
                 yPadding = 30
             } else {
@@ -43,8 +43,8 @@ class SampleVC: UIViewController {
             }
             
             iconView.setType = i
-            iconView.setColor = UIColor.cyanColor()
-            iconView.backgroundColor = UIColor.redColor()
+            iconView.setColor = UIColor.cyan
+            iconView.backgroundColor = UIColor.red
         
             self.view.addSubview(iconView)
         }
