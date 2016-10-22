@@ -1,5 +1,7 @@
 # Skycons-Swift
 
+~Master updated to Swift 3.0, branch 2.2 still available.
+
 This is a port of the animated HTML5 canvas weather icons - [**Skycons**](http://darkskyapp.github.io/skycons/) from [**forecast.io**](http://forecast.io) - to Swift. Credit goes to [**zachwaugh**](https://github.com/zachwaugh/cocoa-skycons) as this project is translated from his works with minor bug fixes.
 
 This is a one day transfer from zachwaugh's Objective C code to Swift, so it is not as Swifty as it should be.
