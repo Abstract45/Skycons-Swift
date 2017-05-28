@@ -14,7 +14,7 @@ enum Skycons {
 }
 
 let STROKE: CGFloat = 0.08
-let TWO_PI = M_PI * 2.0
+let TWO_PI = Double.pi * 2.0
 let TWO_OVER_SQRT_2 = 2.0 / sqrt(2)
 
 struct SKYWindOffset {
@@ -416,9 +416,9 @@ class SKYIconView: UIView {
         
         setUpStroke(ctx, lineCapType: .round, joinCapType: .round, lineWidth: s, color: color, fillColor: color)
         ctx.beginPath()
-        CGContextAddArc(ctx, x, y, a, d, d + CGFloat(M_PI), 1)
-        CGContextAddArc(ctx, x - b * e, y - b * f, c, d + CGFloat(M_PI), d, 1)
-        CGContextAddArc(ctx, x + c * e, y + c * f, b, d + CGFloat(M_PI), d, 0)
+        CGContextAddArc(ctx, x, y, a, d, d + CGFloat(Double.pi), 1)
+        CGContextAddArc(ctx, x - b * e, y - b * f, c, d + CGFloat(Double.pi), d, 1)
+        CGContextAddArc(ctx, x + c * e, y + c * f, b, d + CGFloat(Double.pi), d, 0)
         
         ctx.setBlendMode(.destinationOut)
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
@@ -530,7 +530,7 @@ class SKYIconView: UIView {
     
     fileprivate func circle(_ ctx: CGContext, x: CGFloat, y: CGFloat, r: CGFloat) {
         ctx.beginPath()
-        CGContextAddArc(ctx, x, y, r, 0, CGFloat(M_PI) * 2, 1)
+        CGContextAddArc(ctx, x, y, r, 0, CGFloat(Double.pi) * 2, 1)
         ctx.fillPath()
     }
     
