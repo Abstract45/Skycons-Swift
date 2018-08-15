@@ -9,7 +9,8 @@
 import Foundation
 import UIKit
 
-enum Skycons {
+enum Skycons
+{
     case clearDay,clearNight,rain,sleet,wind,fog,cloudy,partlyCloudyDay,partlyCloudyNight,snow
 }
 
@@ -135,7 +136,7 @@ class SKYIconView: UIView {
         self._timer = nil
     }
     
-    func update(_ timer:Timer) {
+    @objc func update(_ timer:Timer) {
         self.refresh()
     }
     
