@@ -11,7 +11,7 @@
 		E8A50F561D147E25006932FC /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8A50F541D147E25006932FC /* Main.storyboard */; };
 		E8A50F581D147E25006932FC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = E8A50F571D147E25006932FC /* Assets.xcassets */; };
 		E8A50F5B1D147E25006932FC /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = E8A50F591D147E25006932FC /* LaunchScreen.storyboard */; };
-		E8A50F641D147E4C006932FC /* SKYIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A50F621D147E4C006932FC /* SKYIconView.swift */; };
+		E8A50F641D147E4C006932FC /* SkyIconView.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A50F621D147E4C006932FC /* SkyIconView.swift */; };
 		E8A50F651D147E4C006932FC /* SampleVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = E8A50F631D147E4C006932FC /* SampleVC.swift */; };
 /* End PBXBuildFile section */
 
@@ -22,7 +22,7 @@
 		E8A50F571D147E25006932FC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		E8A50F5A1D147E25006932FC /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		E8A50F5C1D147E25006932FC /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		E8A50F621D147E4C006932FC /* SKYIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SKYIconView.swift; sourceTree = "<group>"; };
+		E8A50F621D147E4C006932FC /* SkyIconView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SkyIconView.swift; sourceTree = "<group>"; };
 		E8A50F631D147E4C006932FC /* SampleVC.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SampleVC.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -58,7 +58,7 @@
 			children = (
 				E8A50F501D147E25006932FC /* AppDelegate.swift */,
 				E8A50F541D147E25006932FC /* Main.storyboard */,
-				E8A50F621D147E4C006932FC /* SKYIconView.swift */,
+				E8A50F621D147E4C006932FC /* SkyIconView.swift */,
 				E8A50F631D147E4C006932FC /* SampleVC.swift */,
 				E8A50F571D147E25006932FC /* Assets.xcassets */,
 				E8A50F591D147E25006932FC /* LaunchScreen.storyboard */,
@@ -108,6 +108,7 @@
 			developmentRegion = English;
 			hasScannedForEncodings = 0;
 			knownRegions = (
+				English,
 				en,
 				Base,
 			);
@@ -140,7 +141,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				E8A50F511D147E25006932FC /* AppDelegate.swift in Sources */,
-				E8A50F641D147E4C006932FC /* SKYIconView.swift in Sources */,
+				E8A50F641D147E4C006932FC /* SkyIconView.swift in Sources */,
 				E8A50F651D147E4C006932FC /* SampleVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
