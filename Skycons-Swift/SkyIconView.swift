@@ -9,21 +9,20 @@
 import Foundation
 import UIKit
 
-enum Skycons
-{
-    case clearDay,clearNight,rain,sleet,wind,fog,cloudy,partlyCloudyDay,partlyCloudyNight,snow
+enum Skycon {
+    case clearDay, clearNight, rain, sleet, wind, fog, cloudy, partlyCloudyDay, partlyCloudyNight, snow
 }
 
-let STROKE: CGFloat = 0.08
-let TWO_PI = Double.pi * 2.0
-let TWO_OVER_SQRT_2 = 2.0 / sqrt(2)
+let strokeWidth: CGFloat = 0.08
+let twoPi = Double.pi * 2.0
+let twoOverSqrtTwo = 2.0 / sqrt(2)
 
-struct SKYWindOffset {
+struct SkyWindOffset {
     var start: CGFloat?
     var end: CGFloat?
 }
 
-let WIND_PATHS = [
+let windPaths = [
     [
         -0.7500, -0.1800, -0.7219, -0.1527, -0.6971, -0.1225,
         -0.6739, -0.0910, -0.6516, -0.0588, -0.6298, -0.0262,
@@ -63,43 +62,39 @@ let WIND_PATHS = [
     ]
 ]
 
-let Wind_OFFSETS = [SKYWindOffset(start: 0.36, end: 0.11), SKYWindOffset(start: 0.56, end: 0.16)]
+let windOffsets = [SkyWindOffset(start: 0.36, end: 0.11), SkyWindOffset(start: 0.56, end: 0.16)]
 
-class SKYIconView: UIView {
+class SkyIconView: UIView {
     
-    fileprivate var _type = Skycons.clearDay
-    fileprivate var _color = UIColor.black
-    fileprivate var _timer: Timer!
+    fileprivate var type = Skycon.clearDay
+    fileprivate var strokeColor = UIColor.black
+    fileprivate var timer: Timer!
     
-    var w: CGFloat {
+    var width: CGFloat {
         return bounds.width
     }
     
-    var h: CGFloat {
+    var height: CGFloat {
         return bounds.height
     }
     
-    var s: CGFloat {
-        return min(w, h)
+    var smaller: CGFloat {
+        return min(width, height)
     }
     
-    override init(frame: CGRect) {
+    init(type: Skycon, strokeColor: UIColor, backgroundColor: UIColor?, frame: CGRect) {
+        
         super.init(frame: frame)
-       self.play()
+        
+        self.type = type
+        self.strokeColor = strokeColor
+        self.backgroundColor = backgroundColor
+        
+        play()
     }
     
     required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-    }
-    
-    var setType: Skycons {
-        get { return _type }
-        set { _type = newValue }
-    }
-    
-    var setColor: UIColor {
-        get { return _color }
-        set { _color = newValue }
     }
     
     func refresh() {
@@ -107,34 +102,33 @@ class SKYIconView: UIView {
     }
     
     override func draw(_ rect: CGRect) {
-//     super.drawRect(rect)
+        //     super.drawRect(rect)
         
         let ctx: CGContext = UIGraphicsGetCurrentContext()!
         self.drawRect(rect, inContext: ctx)
     }
     
     func isAnimating() -> Bool {
-        return self._timer != nil
+        return self.timer != nil
     }
     
     func play() {
         
-        
-        
-        if _timer != nil {
+        if timer != nil {
             self.pause()
         }
-        self._timer = Timer.scheduledTimer(timeInterval: 1/30, target: self, selector: #selector(update(_:)), userInfo: nil, repeats: true)
+
+        self.timer = Timer.scheduledTimer(timeInterval: 1/30, target: self, selector: #selector(update(_:)), userInfo: nil, repeats: true)
         RunLoop.main.add(_timer, forMode: .commonModes)
     }
     
     func pause() {
         
-        if self._timer != nil {
-            self._timer?.invalidate()
+        if self.timer != nil {
+            self.timer?.invalidate()
         }
         
-        self._timer = nil
+        self.timer = nil
     }
     
     @objc func update(_ timer:Timer) {
@@ -146,9 +140,9 @@ class SKYIconView: UIView {
     fileprivate func drawRect(_ rect: CGRect, inContext context: CGContext) {
         
         let time: Double = Date().timeIntervalSince1970 * 1000
-        let color: CGColor = self._color.cgColor
+        let color: CGColor = self.strokeColor.cgColor
         
-        switch self._type {
+        switch self.type {
         case .clearDay:
             drawClearDayInContext(context, time: time, color: color)
         case .clearNight:
@@ -176,95 +170,95 @@ class SKYIconView: UIView {
     
     fileprivate func drawClearDayInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
-        sun(ctx, t: time, cx: w * 0.5, cy: h * 0.5, cw: s, s: s * STROKE, color: color)
+        sun(ctx, t: time, cx: width * 0.5, cy: height * 0.5, cw: smaller, s: smaller * strokeWidth, color: color)
     }
     
     fileprivate func drawClearNightInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
-        moon(ctx, t: time, cx: w * 0.5, cy: h * 0.5, cw: s, s: s * STROKE, color: color)
+        moon(ctx, t: time, cx: width * 0.5, cy: height * 0.5, cw: smaller, s: smaller * strokeWidth, color: color)
     }
     
     fileprivate func drawPartlyCloudyDayInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        sun(ctx, t: time, cx: w * 0.625, cy: h * 0.375, cw: s * 0.75, s: s * STROKE, color: color)
-        cloud(ctx, t: time, cx: w * 0.375, cy: h * 0.625, cw: s * 0.75, s: s * STROKE, color: color)
+        sun(ctx, t: time, cx: width * 0.625, cy: height * 0.375, cw: smaller * 0.75, s: smaller * strokeWidth, color: color)
+        cloud(ctx, t: time, cx: width * 0.375, cy: height * 0.625, cw: smaller * 0.75, s: smaller * strokeWidth, color: color)
         ctx.endTransparencyLayer()
     }
     
     fileprivate func drawPartlyCloudyNightInCotnext(_ ctx: CGContext, time: Double, color: CGColor) {
         
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        moon(ctx, t: time, cx: w * 0.625, cy: h * 0.375, cw: s * 0.75, s: s * STROKE, color: color)
-        cloud(ctx, t: time, cx: w * 0.375, cy: h * 0.625, cw: s * 0.75, s: s * STROKE, color: color)
+        moon(ctx, t: time, cx: width * 0.625, cy: height * 0.375, cw: smaller * 0.75, s: smaller * strokeWidth, color: color)
+        cloud(ctx, t: time, cx: width * 0.375, cy: height * 0.625, cw: smaller * 0.75, s: smaller * strokeWidth, color: color)
         ctx.endTransparencyLayer()
     }
     
     fileprivate func drawCloudyInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        cloud(ctx, t: time, cx: w * 0.5, cy: h * 0.5, cw: s, s: s * STROKE, color: color)
+        cloud(ctx, t: time, cx: width * 0.5, cy: height * 0.5, cw: smaller, s: smaller * strokeWidth, color: color)
         ctx.endTransparencyLayer()
     }
     
     fileprivate func drawRainInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        rain(ctx, t: time, cx: w * 0.5, cy: h * 0.37, cw: s * 0.9, s: s * STROKE, color: color)
-        cloud(ctx, t: time, cx: w * 0.5, cy: h * 0.37, cw: s * 0.9, s: s * STROKE, color: color)
+        rain(ctx, t: time, cx: width * 0.5, cy: height * 0.37, cw: smaller * 0.9, s: smaller * strokeWidth, color: color)
+        cloud(ctx, t: time, cx: width * 0.5, cy: height * 0.37, cw: smaller * 0.9, s: smaller * strokeWidth, color: color)
         ctx.endTransparencyLayer()
     }
     
     fileprivate func drawSleetInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        sleet(ctx, t: time, cx: w * 0.5, cy: h * 0.37, cw: s * 0.9, s: s * STROKE, color: color)
-        cloud(ctx, t: time, cx: w * 0.5, cy: h * 0.37, cw: s * 0.9, s: s * STROKE, color: color)
+        sleet(ctx, t: time, cx: width * 0.5, cy: height * 0.37, cw: smaller * 0.9, s: smaller * strokeWidth, color: color)
+        cloud(ctx, t: time, cx: width * 0.5, cy: height * 0.37, cw: smaller * 0.9, s: smaller * strokeWidth, color: color)
         ctx.endTransparencyLayer()
     }
     
     fileprivate func drawSnowInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        snow(ctx, t: time, cx: w * 0.5, cy: h * 0.37, cw: s * 0.9, s: s * STROKE, color: color)
-        cloud(ctx, t: time, cx: w * 0.5, cy: h * 0.37, cw: s * 0.9, s: s * STROKE, color: color)
+        snow(ctx, t: time, cx: width * 0.5, cy: height * 0.37, cw: smaller * 0.9, s: smaller * strokeWidth, color: color)
+        cloud(ctx, t: time, cx: width * 0.5, cy: height * 0.37, cw: smaller * 0.9, s: smaller * strokeWidth, color: color)
         ctx.endTransparencyLayer()
     }
     
     fileprivate func drawWindInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
-        swoosh(ctx, t: time, cx: w * 0.5, cy: h * 0.5, cw: s, s: s * STROKE, index: 0, total: 2, color: color)
-        swoosh(ctx, t: time, cx: w * 0.5, cy: h * 0.5, cw: s, s: s * STROKE, index: 1, total: 2, color: color)
+        swoosh(ctx, t: time, cx: width * 0.5, cy: height * 0.5, cw: smaller, s: smaller * strokeWidth, index: 0, total: 2, color: color)
+        swoosh(ctx, t: time, cx: width * 0.5, cy: height * 0.5, cw: smaller, s: smaller * strokeWidth, index: 1, total: 2, color: color)
     }
     
     fileprivate func drawFogInContext(_ ctx: CGContext, time: Double, color: CGColor) {
         
-        let k = s * STROKE
+        let k = smaller * strokeWidth
         ctx.beginTransparencyLayer(auxiliaryInfo: nil)
-        fogBank(ctx, t: time, cx: w * 0.5, cy: h * 0.32, cw: s * 0.75, s: k, color: color)
+        fogBank(ctx, t: time, cx: width * 0.5, cy: height * 0.32, cw: smaller * 0.75, s: k, color: color)
         ctx.endTransparencyLayer()
         
         let newTime = time/5000
-        let ds = Double(s)
+        let ds = Double(smaller)
         
-        let a = CGFloat(cos((newTime) * TWO_PI) * ds * 0.02)
-        let b = CGFloat(cos((newTime + 0.25) * TWO_PI) * ds * 0.02)
-        let c = CGFloat(cos((newTime + 0.50) * TWO_PI) * ds * 0.02)
-        let d = CGFloat(cos((newTime + 0.75) * TWO_PI) * ds * 0.02)
-        let n = h * 0.936
+        let a = CGFloat(cos((newTime) * twoPi) * ds * 0.02)
+        let b = CGFloat(cos((newTime + 0.25) * twoPi) * ds * 0.02)
+        let c = CGFloat(cos((newTime + 0.50) * twoPi) * ds * 0.02)
+        let d = CGFloat(cos((newTime + 0.75) * twoPi) * ds * 0.02)
+        let n = height * 0.936
         let e = floor(n - k * 0.5) + 0.5
         let f = floor((n - k * 2.5)) + 0.5
         
         setUpStroke(ctx, lineCapType: .round, joinCapType: .round, lineWidth: k, color: color, fillColor: nil)
-        line(ctx, ax: a + w * 0.2 + k * 0.5, ay: e, bx: b + w * 0.8 - k * 0.5, by: e)
-        line(ctx, ax: c + w * 0.2 + k * 0.5, ay: f, bx: d + w * 0.8 - k * 0.5, by: f)
+        line(ctx, ax: a + width * 0.2 + k * 0.5, ay: e, bx: b + width * 0.8 - k * 0.5, by: e)
+        line(ctx, ax: c + width * 0.2 + k * 0.5, ay: f, bx: d + width * 0.8 - k * 0.5, by: f)
     }
     
     // Mark: Basic shapes
     
     fileprivate func puff(_ ctx: CGContext, t: Double, cx: CGFloat, cy:CGFloat, rx:CGFloat, ry:CGFloat,rmin:CGFloat, rmax: CGFloat) {
-        let c = CGFloat(cos(t * TWO_PI))
-        let s = CGFloat(sin(t * TWO_PI))
+        let c = CGFloat(cos(t * twoPi))
+        let s = CGFloat(sin(t * twoPi))
         let rmaximum = rmax - rmin
         
         circle(ctx, x: cx - s * rx, y: cy + c * ry + rmaximum * 0.5, r: rmin + (1 - c * 0.5) * rmaximum)
@@ -302,11 +296,11 @@ class SKYIconView: UIView {
         ctx.beginPath()
         
         
-        CGContextAddArc(ctx, cx, cy, a, 0, CGFloat(TWO_PI), 1)
+        CGContextAddArc(ctx, cx, cy, a, 0, CGFloat(twoPi), 1)
         ctx.strokePath()
         
         for i in (0...8).reversed() {
-            let p = (time + Double(i) / 8) * (TWO_PI)
+            let p = (time + Double(i) / 8) * (twoPi)
             let cosine = CGFloat(cos(p))
             let sine = CGFloat(sin(p))
             line(ctx, ax: cx + cosine * b, ay: cy + sine * b, bx: cx + cosine * c, by: cy + sine * c)
@@ -317,14 +311,14 @@ class SKYIconView: UIView {
         let time = t/15000
         let a = cw * 0.29 - s * 0.5
         let b: CGFloat = cw * 0.05
-        let c = CGFloat(cos(time * TWO_PI))
-        let p = CGFloat(c * CGFloat(TWO_PI / -16))
+        let c = CGFloat(cos(time * twoPi))
+        let p = CGFloat(c * CGFloat(twoPi / -16))
         let newcx = cx + c * b
         
         setUpStroke(ctx, lineCapType: .round, joinCapType: .round, lineWidth: s, color: color, fillColor: nil)
         ctx.beginPath()
-        CGContextAddArc(ctx, newcx, cy, a, p + CGFloat(TWO_PI/8), p + CGFloat(TWO_PI * 7/8), 0)
-        CGContextAddArc(ctx, newcx + cos(p) * a * CGFloat(TWO_OVER_SQRT_2), cy + sin(p) * a * CGFloat(TWO_OVER_SQRT_2), a, p + CGFloat(TWO_PI) * 5 / 8, p + CGFloat(TWO_PI) * 3 / 8, 1)
+        CGContextAddArc(ctx, newcx, cy, a, p + CGFloat(twoPi/8), p + CGFloat(twoPi * 7/8), 0)
+        CGContextAddArc(ctx, newcx + cos(p) * a * CGFloat(twoOverSqrtTwo), cy + sin(p) * a * CGFloat(twoOverSqrtTwo), a, p + CGFloat(twoPi) * 5 / 8, p + CGFloat(twoPi) * 3 / 8, 1)
         ctx.closePath()
         ctx.strokePath()
     }
@@ -332,8 +326,8 @@ class SKYIconView: UIView {
     fileprivate func rain(_ ctx: CGContext, t: Double, cx: CGFloat, cy: CGFloat, cw:CGFloat, s: CGFloat, color: CGColor) {
         let time = t / 1350
         let a: Double = Double(cw) * 0.16
-        let b = TWO_PI * 11 / 12
-        let c = TWO_PI * 7 / 12
+        let b = twoPi * 11 / 12
+        let c = twoPi * 7 / 12
         
         ctx.setFillColor(color)
         for i in (0...4).reversed(){
@@ -368,13 +362,13 @@ class SKYIconView: UIView {
         
         let a = cw * 0.16
         let b = Double(s * 0.75)
-        let u = time * TWO_PI * 0.7
+        let u = time * twoPi * 0.7
         let ux = CGFloat(cos(u) * b)
         let uy = CGFloat(sin(u) * b)
-        let v = u + TWO_PI / 3
+        let v = u + twoPi / 3
         let vx = CGFloat(cos(v) * b)
         let vy = CGFloat(sin(v) * b)
-        let w = u + TWO_PI * 2 / 3
+        let w = u + twoPi * 2 / 3
         let wx = CGFloat(cos(w) * b)
         let wy = CGFloat(sin(w) * b)
         
@@ -382,7 +376,7 @@ class SKYIconView: UIView {
         
         for i in (0..<4).reversed() {
             let p = fmod(time + Double(i)/4, 1)
-            let x = cx + CGFloat(sin(p + Double(i) / 4 * TWO_PI)) * a
+            let x = cx + CGFloat(sin(p + Double(i) / 4 * twoPi)) * a
             let y = cy + CGFloat(p) * cw
             
             line(ctx, ax: x - ux, ay: y - uy, bx: x + ux, by: y + uy)
@@ -411,7 +405,7 @@ class SKYIconView: UIView {
         let a = cw / 8
         let b = a / 3
         let c = 2 * b
-        let d = CGFloat(fmod(t, 1) * TWO_PI)
+        let d = CGFloat(fmod(t, 1) * twoPi)
         let e = CGFloat(cos(d))
         let f = CGFloat(sin(d))
         
@@ -433,9 +427,9 @@ class SKYIconView: UIView {
     fileprivate func swoosh(_ ctx: CGContext, t: Double, cx: CGFloat, cy: CGFloat, cw:CGFloat, s: CGFloat, index: Int, total: Double, color: CGColor) {
         
         let time = t / 2500
-        let windOffset = Wind_OFFSETS[index]
+        let windOffset = windOffsets[index]
         let pathLength = index == 0 ? 128 : 64
-        let path = WIND_PATHS[index]
+        let path = windPaths[index]
         var a = fmod(time + Double(index) - Double(windOffset.start!), total)
         var c = fmod(time + Double(index) - Double(windOffset.end!), total)
         var e = fmod(time + Double(index), total)
@@ -548,11 +542,5 @@ class SKYIconView: UIView {
         let isClockWise = clockwise == 0 ? false : true
         context.addArc(center: centerPoint, radius: radius, startAngle: startAngle, endAngle: endAngle, clockwise: isClockWise)
     }
-
+    
 }
-
-
-
-
-
-

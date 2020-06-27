@@ -10,7 +10,7 @@ import UIKit
 
 
 class SampleVC: UIViewController {
-
+    
     var xPadding: CGFloat = 30
     var yPadding: CGFloat = 30
     
@@ -18,7 +18,7 @@ class SampleVC: UIViewController {
         super.viewDidLoad()
         
         
-        let weatherTypes: [Skycons] =
+        let weatherTypes: [Skycon] =
             [
                 .clearDay,
                 .clearNight,
@@ -32,8 +32,10 @@ class SampleVC: UIViewController {
                 .wind
         ]
         
-        for i in weatherTypes {
-            let iconView = SKYIconView(frame: CGRect(x: xPadding, y: yPadding, width: 128, height: 128))
+        for type in weatherTypes {
+            
+            let frame = CGRect(x: xPadding, y: yPadding, width: 128, height: 128)
+            let iconView = SkyIconView(type: type, strokeColor: .white, backgroundColor: .black, frame: frame)
             
             if yPadding >= UIScreen.main.bounds.height - 200 {
                 xPadding += 150
@@ -42,12 +44,8 @@ class SampleVC: UIViewController {
                 yPadding += 140
             }
             
-            iconView.setType = i
-            iconView.setColor = UIColor.cyan
-            iconView.backgroundColor = UIColor.red
-        
             self.view.addSubview(iconView)
         }
-       
+        
     }
 }
