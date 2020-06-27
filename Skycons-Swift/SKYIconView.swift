@@ -125,6 +125,7 @@ class SKYIconView: UIView {
             self.pause()
         }
         self._timer = Timer.scheduledTimer(timeInterval: 1/30, target: self, selector: #selector(update(_:)), userInfo: nil, repeats: true)
+        RunLoop.main.add(_timer, forMode: .commonModes)
     }
     
     func pause() {
